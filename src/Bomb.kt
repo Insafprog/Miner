@@ -1,7 +1,8 @@
 internal class Bomb(val totalBombs: Int) {
-    private val bombMap: Matrix = Matrix(Box.ZERO)
+    private val bombMap: Matrix
 
     init {
+        bombMap = Matrix(Box.ZERO)
         placeBomb()
     }
 
