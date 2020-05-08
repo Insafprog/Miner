@@ -1,22 +1,33 @@
-internal class Bomb(val totalBombs: Int) {
-    private val bombMap: Matrix
+import kotlin.math.min
+
+internal class Bomb(totalBombs: Int) {
+    private val bombMap: Matrix = Matrix(Box.ZERO)
+    val totalBombs = min(totalBombs, Ranges.size / 4)
 
     init {
-        bombMap = Matrix(Box.ZERO)
         placeBomb()
     }
 
     private fun placeBomb() {
-        val bombs = Array(totalBombs){ Ranges.randomCoordinate }
-        bombs.forEach {coordinate ->
-            bombMap.setBox(coordinate, Box.BOMB)
-        }
-        bombs.forEach {coordinate ->
-            Ranges.getCoordinatesAround(coordinate).forEach {numCoordinate ->
-                bombMap.setBox(numCoordinate, Box.NUM1)
+        repeat(totalBombs) {
+            var coordinate: Coordinate
+            while (true) {
+                coordinate = Ranges.randomCoordinate
+                if (bombMap.getBox(coordinate) != Box.BOMB) break
             }
+            bombMap.setBox(coordinate, Box.BOMB)
+            incNumbersAroundBomb(coordinate)
         }
+
+
     }
 
     fun getBomb(coordinate: Coordinate) = bombMap.getBox(coordinate)
+
+    private fun incNumbersAroundBomb(coordinate: Coordinate) {
+        Ranges.getCoordinatesAround(coordinate).forEach {numCoordinate ->
+            if (Box.BOMB != bombMap.getBox(numCoordinate))
+                bombMap.setBox(numCoordinate, bombMap.getBox(numCoordinate)!!.nextNumberBox)
+        }
+    }
 }

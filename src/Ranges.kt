@@ -10,7 +10,7 @@ object Ranges {
     lateinit var allCoordinates: List<Coordinate>
         private set
     val randomCoordinate: Coordinate
-        get() = Coordinate((0..cols).random(), (0..rows).random())
+        get() = Coordinate((0 until cols).random(), (0 until rows).random())
 
     fun setSize(cols: Int, rows: Int) {
         this.cols = cols
@@ -24,7 +24,7 @@ object Ranges {
         this.allCoordinates = allCoordinates
     }
 
-    fun inRange(coordinate: Coordinate) = coordinate.x * coordinate.y < size
+    fun inRange(coordinate: Coordinate) = coordinate.x in 0 until cols && coordinate.y in 0 until rows
 
     fun getCoordinatesAround(coordinate: Coordinate): List<Coordinate> {
         val list = mutableListOf<Coordinate>()
@@ -43,7 +43,7 @@ data class Coordinate(val x: Int, val y: Int) {
     val yd: Double by lazy { y.toDouble() }
 }
 
-internal class Matrix(val defaultBox: Box) {
+internal class Matrix(private val defaultBox: Box) {
     private val matrix: Array<Box> = Array(Ranges.size) {defaultBox}
 
     fun getBox(coordinate: Coordinate) =
