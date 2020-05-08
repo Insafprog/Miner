@@ -7,17 +7,20 @@ import javafx.scene.layout.HBox
 import javafx.stage.Stage
 
 class Miner: Application() {
-    private val cols = 15
-    private val rows = 1
-    private val imageSize = 50.0
+    private val cols = 9
+    private val rows = 9
+    private val bombs = 10
+    private val imageSize = 50
+
+    private val game = Game(cols, rows, bombs)
 
 
     override fun start(primaryStage: Stage) {
-        val canvas = Canvas(imageSize * cols, imageSize * rows)
+        val canvas = Canvas(imageSize * Ranges.sizeCoordinate.xd, imageSize * Ranges.sizeCoordinate.yd)
         val graphicsContext = canvas.graphicsContext2D
         setImages()
-        Box.values().forEach { box ->
-            graphicsContext.drawImage(box.image as Image, box.ordinal * imageSize, 0.0)
+        Ranges.allCoordinates.forEach { coordinate ->
+            graphicsContext.drawImage(game.getBox(coordinate)?.image as Image, coordinate.xd * imageSize, coordinate.yd * imageSize)
         }
         val root = HBox()
         root.alignment = Pos.CENTER
